@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Form</title>
+    <link rel="stylesheet" href="research.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="media/logo.jpg" alt="Logo" />
+            <h1>Insert Your Research Work</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="FYP Project Work/FYP Project Work/FrontEnd/Employee Portal/employee-portal.php"><button>X</button></a></li>
+                
+            </ul>
+        </nav>
+    </header>
+<!-- Loader -->
+<div class="loader" id="loader-3"></div>
+<div class="form-container">
+    <form class="custom-form" id="research_form"action="insert_research_paper.php" method="POST">
+        <!-- Row 1 -->
+        <div class="form-row">
+            <input type="text" name="doi" placeholder="DOI" id="doi" required>
+            <input type="text" name="title" placeholder="Title" id="title" required>
+            <input type="text" name="journal" placeholder="Journal's Name" id="journal" required>
+        </div>
+        
+        <!-- Row 2 -->
+        <div class="form-row">
+            <input type="text" name="issn" placeholder="ISSN" id="issn"required>
+            <input type="date" name="dop"  placeholder="Date Of Publish" id="dop" autocomplete="off">
+            <input type="text" name="subject" placeholder="Area Of Research" id="" required>
+            <input type="text" name="sub_subject" placeholder="Subject Sub Categories" id="" required>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="form-row">
+            <select id="hrjs" name="hrjs" required>
+                <option disabled selected>HRJS Category</option>
+                    <option value= "W">W Category</option>
+                    <option value= "X">X Category</option>
+                    <option value= "Y">Y Category</option>    
+            </select>
+            <input type="text" name="impact" placeholder="Impact Factor" id="impact" required>
+            <input type="text" name="volume" placeholder="Volume" id="volume" required>
+            <input type="text" name="country" placeholder="Country" id="country" required>
+
+        </div>
+        <input type="hidden" name="citation" id="citation">
+        <div class="abc">
+            <button type="button" onclick="fetchResults(event)">Fetch Results</button>
+            <br>
+            <br>
+            <button type="submit">Submit</button>
+        </div>
+        
+    </form>
+</div>
+
+
+<script>
+    async function fetchResults(event) {
+        event.preventDefault();  // Prevent form submission
+
+        const doi = document.getElementById("doi").value;
+        const title = document.getElementById("title").value;
+        const journal = document.getElementById("journal").value;
+        
+        // Show the loader
+        document.getElementById('loader-3').style.display = 'flex';
+
+        // Build the query string for the API request
+        const params = new URLSearchParams({ doi, title, journal_name: journal }).toString();
+        
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/get-paper-info?${params}`);
+            const data = await response.json();
+
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            
+            // Wait for 3 seconds to simulate loading
+            setTimeout(() => {
+                // Hide the loader after 3 seconds
+                document.getElementById('loader-3').style.display = 'none';
+
+                // Fill in the form fields with the data received
+                document.getElementById("doi").value = data.DOI || '';
+                document.getElementById("title").value = data.Title || '';
+                document.getElementById("journal").value = data.Journal || '';
+                document.getElementById("issn").value = data.ISSN || '';
+                document.getElementById("dop").value = data["Publication Date"] || '';
+                document.getElementById("impact").value = data["Impact Factor"] || '';
+                document.getElementById("volume").value = data.Volume || '';
+                document.getElementById("citation").value = data.Citations || '';
+
+                // Store authors in a variable for later use
+                window.authors = data.Authors || [];
+                window.Citations = data.Citations;
+
+                // Display authors in the console (or use as needed)
+                console.log("Authors:", window.authors);
+                console.log("Citations:", window.Citations);
+            }, 150); // 3-second delay
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            alert("An error occurred while fetching data.");
+            // Hide the loader in case of an error
+            document.getElementById('loader-3').style.display = 'none';
+        }
+    }
+</script>
+
+
+
+</body>
+</html>

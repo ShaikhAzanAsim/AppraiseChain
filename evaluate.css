@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
+
+
+
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+body {
+    background: #161512; /* Fallback background color */
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg'); /* Add your background image here */
+    background-size: cover;
+    background-position: center;
+    
+    margin: 50px; /* Border effect */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+
+}
+
+/* Styling the white rectangle box */
+.container {
+    background: rgba(255, 255, 255, 0.9); /* White with slight transparency */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8); /* Subtle shadow */
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    max-width: 800px;
+    height: auto;
+    overflow: auto;
+}
+/* Loader styling */
+.loader{
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* LOADER 3 */
+
+#loader-3:before, #loader-3:after{
+    content: "";
+    width: 20px;
+    height: 20px;
+    top: 100px;
+    left: calc(50% - 10px);
+    background-color: #e7d957;
+    animation: squaremove 1s ease-in-out infinite;
+  }
+  
+  #loader-3:after{
+    bottom: 0;
+    animation-delay: 0.5s;
+  }
+  
+  @keyframes squaremove{
+    0%, 100%{
+      -webkit-transform: translate(0,0) rotate(0);
+      -ms-transform: translate(0,0) rotate(0);
+      -o-transform: translate(0,0) rotate(0);
+      transform: translate(0,0) rotate(0);
+    }
+  
+    25%{
+      -webkit-transform: translate(40px,40px) rotate(45deg);
+      -ms-transform: translate(40px,40px) rotate(45deg);
+      -o-transform: translate(40px,40px) rotate(45deg);
+      transform: translate(40px,40px) rotate(45deg);
+    }
+  
+    50%{
+      -webkit-transform: translate(0px,80px) rotate(0deg);
+      -ms-transform: translate(0px,80px) rotate(0deg);
+      -o-transform: translate(0px,80px) rotate(0deg);
+      transform: translate(0px,80px) rotate(0deg);
+    }
+  
+    75%{
+      -webkit-transform: translate(-40px,40px) rotate(45deg);
+      -ms-transform: translate(-40px,40px) rotate(45deg);
+      -o-transform: translate(-40px,40px) rotate(45deg);
+      transform: translate(-40px,40px) rotate(45deg);
+    }
+  }
+  
+
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+header {
+    position: fixed;
+    top: -18px;
+    left: 0;
+    width: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    z-index: 1000;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+header .logo img {
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+}
+
+header .logo h1 {
+    font-size: 28px;
+    color: #fff;
+}
+
+header h1 {
+    font-size: 32px;
+    
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+    color: #ffeba7;
+}
+
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #797977;
+    color: #ffeba7;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 0 auto;
+}
+
+button:hover {
+    background-color: #ffeba7;
+    color: #797977;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}

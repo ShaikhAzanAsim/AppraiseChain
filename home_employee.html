@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Researcher's Portal</title>
+    <link rel="stylesheet" href="hod_styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="media/logo.jpg" alt="Logo" />
+            <h1>RESEARCHER'S PORTAL</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="insert_research.html">Insert Research Paper</a></li>
+                <li><a href="#">Feedback</a></li>
+                <li><a href="setting_employee.html">Settings</a></li>
+                <a href="index.php"><button>Logout</button></a>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+<!--
+        <?php
+    // Assuming you fetched the employee image URL from the database
+    $image_url = "path_from_database/profile.jpg";
+?>
+<div class="card" style="background-image: url('<?php echo $image_url; ?>');" onmouseover="raise(this)" onmouseleave="lower(this)">
+-->
+        <div class="dashboard">
+            <!-- Updated Employee Profile Card -->
+            <div class="card" style="background-image: url('media/me.jpg');" onmouseover="raise(this)" onmouseleave="lower(this)">
+                <div class="overlay">
+                    <h2>Shaikh Azan Asim</h2><!-- db se ayega -->
+                    <h2 class="age">22</h2>
+                    <p class="info">FAST-CS</p>
+                    <div class="tasks">
+                        <div>No. Of Employee: 1</div> 
+                    </div>
+                    <span class="smallprint">&copy; 2024 HOD Portal</span>
+                </div>
+            </div>
+
+             <!-- Attendance Graph Card -->
+            <div class="card_1">
+                <div class="content">
+                    <h2>Attendance Graph</h2>
+                    <!-- You can later add a canvas or an SVG element here for a graph -->
+                    <div class="graph-placeholder">[Graph will go here]</div>
+                </div>
+            </div>
+
+            <!-- Employee Performance Pie Chart Card -->
+            <div class="card_2">
+                <div class="content">
+                    <h2>Performance Overview</h2>
+                    <!-- You can later add a canvas or an SVG element here for a pie chart -->
+                    <div class="chart-placeholder">[Pie chart will go here]</div>
+                </div>
+            </div>
+
+            <!-- Tasks Card -->
+            <div class="card_3">
+                <div class="content">
+                    <h2>FYP</h2>
+                    <div class="tasks-overview">[Task details will go here]</div>
+                </div>
+            </div>
+
+            <div class="card_4">
+                <div class="content">
+                    <h2>Evaluated</h2>
+                    <div class="tasks-overview">[Task details will go here]</div>
+                </div>
+            </div>
+            
+            <div class="card_5">
+                <div class="content">
+                    <h2>AI SCORE</h2>
+                    <div class="tasks-overview">[Task details will go here]</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 HOD Portal</p>
+    </footer>
+
+    <script>
+        function raise(element) {
+            const overlay = element.querySelector('.overlay');
+            overlay.style.top = "-4px";
+          }
+          
+          function lower(element) {
+            const overlay = element.querySelector('.overlay');
+            overlay.style.top = "75%";
+          }
+
+    </script>
+</body>
+</html>

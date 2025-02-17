@@ -1,0 +1,129 @@
+home page!!!!                                                                                           ()
+employee dashboard(will  see own info and own score plus winner's name and score)                       ()
+hod dashboard(will see info of all his/her employee)                                                    ()
+
+attendance table upon login                                                                             (DONE)
+hod will enter employees                                                                                (DONE)
+report option over 7 days or a month as per users req                                                   ()
+Employee will enter research paper all detail(need to create a form)                                    (DONE)
+
+auto tracking of inactive and active time (will feed this to AI model)                                  (DONE)
+threshold set to 10 mins i think                                                                        (DONE)
+
+check on web if research paper is authentic or not                                                      (DONE)
+
+insert only authentic paper after categorizing into w,x and z                                           (DONE)
+
+push notification:
+1, upon inactive/active                                                                                 (DONE)
+2, when hod presses evaluate button so he/she will get a notification about the best employee           (DONE)
+3, when employee enters info about research paper                                                       (DONE)
+4, tell emp if research paper was authentic or not                                                      (DONE)
+
+about us page!!                                                                                         ()
+loader b/t pages and upon AI model when evaluating                                                      (DONE)
+
+
+//hod dashboard
+
+//attendance
+select e.fname as employee_name,COUNT(a.date) AS total_active_days 
+from attendance a 
+JOIN employee e ON a.emp_id = e.cnic 
+join hod h on e.organization_id =h.organization_id 
+join organization o on o.id=h.organization_id
+where h.cnic="33333-3333333-2"
+group by e.cnic;
+
+//activity
+select e.fname as employee_name, a.active_time,a.passive_time
+from activity a 
+JOIN employee e ON a.emp_id = e.cnic 
+join hod h on e.organization_id =h.organization_id 
+join organization o on o.id=h.organization_id
+where h.cnic="22222-2222222-5"
+group by e.cnic;
+
+//fyp
+select e.fname as employee_name, f.name,f.status
+from fyp f 
+JOIN employee e ON f.emp_id = e.cnic 
+join hod h on e.organization_id =h.organization_id 
+join organization o on o.id=h.organization_id
+where h.cnic="22222-2222222-5";
+
+//researchpaper
+select e.fname as employee_name, r.title,r.journal,r.hrjs_category,r.subject
+from researchpaper r
+JOIN employee e ON r.employee_id = e.cnic 
+join hod h on e.organization_id =h.organization_id 
+join organization o on o.id=h.organization_id
+where h.cnic="33333-3333333-2";
+
+
+
+
+
+//this will be the input for ai model
+SELECT 
+    CONCAT(e.fname, ' ', e.lname) AS employee_name,
+    e.cnic AS cnic,
+    
+    (SELECT COUNT(*) FROM researchpaper r WHERE r.employee_id = e.cnic) AS total_p,
+    
+    (SELECT SUM(r.citations_count) FROM researchpaper r WHERE r.employee_id = e.cnic) AS citations,
+    (CASE 
+    	WHEN p.qualification = 'PhD' THEN 10
+    	WHEN p.qualification = 'Masters' THEN 7
+    	WHEN p.qualification = 'Bachelors' THEN 4
+    	ELSE 0 
+	END) AS qualification,
+    
+    (SELECT COUNT(*) FROM fyp f WHERE f.emp_id = e.cnic) AS fyp_num,
+    
+    (CASE 
+        WHEN (SELECT COUNT(*) FROM fyp f WHERE f.emp_id = e.cnic) > 0 THEN
+            (SELECT COUNT(*) FROM fyp f WHERE f.emp_id = e.cnic AND f.status = 1) / 
+            (SELECT COUNT(*) FROM fyp f WHERE f.emp_id = e.cnic) * 10
+        ELSE 0
+    END) AS fyp_success,
+    
+    
+    (CASE 
+        WHEN ((SELECT SUM(t.active_time) FROM activity t WHERE t.emp_id = e.cnic) + 
+              (SELECT SUM(t.passive_time) FROM activity t WHERE t.emp_id = e.cnic)) > 0 THEN
+            (SELECT SUM(t.active_time) FROM activity t WHERE t.emp_id = e.cnic) * 10 /
+            ((SELECT SUM(t.active_time) FROM activity t WHERE t.emp_id = e.cnic) +
+             (SELECT SUM(t.passive_time) FROM activity t WHERE t.emp_id = e.cnic))
+        ELSE 0
+    END) AS active,
+    
+    
+    (CASE 
+        WHEN (SELECT COUNT(*) FROM researchpaper r WHERE r.organization_id = h.organization_id AND r.hrjs_category = 'W') > 0 THEN
+            (SELECT COUNT(*) FROM researchpaper r WHERE r.employee_id = e.cnic AND r.hrjs_category = 'W') /
+            (SELECT COUNT(*) FROM researchpaper r WHERE r.organization_id = h.organization_id AND r.hrjs_category = 'W') * 20
+        ELSE 0
+    END) AS w,
+    (CASE 
+        WHEN (SELECT COUNT(*) FROM researchpaper r WHERE r.organization_id = h.organization_id AND r.hrjs_category = 'X') > 0 THEN
+            (SELECT COUNT(*) FROM researchpaper r WHERE r.employee_id = e.cnic AND r.hrjs_category = 'X') /
+            (SELECT COUNT(*) FROM researchpaper r WHERE r.organization_id = h.organization_id AND r.hrjs_category = 'X') * 15
+        ELSE 0
+    END) AS x,
+    (CASE 
+        WHEN (SELECT COUNT(*) FROM researchpaper r WHERE r.organization_id = h.organization_id AND r.hrjs_category = 'Y') > 0 THEN
+            (SELECT COUNT(*) FROM researchpaper r WHERE r.employee_id = e.cnic AND r.hrjs_category = 'Y') /
+            (SELECT COUNT(*) FROM researchpaper r WHERE r.organization_id = h.organization_id AND r.hrjs_category = 'Y') * 10
+        ELSE 0
+    END) AS y,
+    
+    ((SELECT COUNT(a.date) FROM attendance a WHERE a.emp_id = e.cnic and a.status = 1) / @all_days * 10) AS attendance_score
+FROM 
+    employee e
+JOIN 
+    hod h ON e.organization_id = h.organization_id
+JOIN
+    performance p ON p.emp_id = e.cnic  
+WHERE 
+    h.cnic = "22222-2222222-5";
